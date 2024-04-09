@@ -15,7 +15,7 @@ export class User {
 
   // 从数据库获取用户信息时 不读取password，可以设置长度30个字节
   @Column({
-    // select: false,
+    select: false,
     length: 100,
   })
   password: string;

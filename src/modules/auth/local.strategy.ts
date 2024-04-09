@@ -20,8 +20,12 @@ export class LocalStrategy extends PassportStrategy(Strategy) {
   // 必须实现一个validate方法
   async validate(username: string, password: string): Promise<any> {
     const user = await this.userService.findByUsername(username);
+    console.log(user, 'user');
     if (!user) {
       throw new CustomException(ErrorCode.ERR_10005);
+    }
+    if (!user.password) {
+      throw new CustomException(ErrorCode.ERR_10000);
     }
     if (!compareSync(password, user.password)) {
       throw new CustomException(ErrorCode.ERR_10002);

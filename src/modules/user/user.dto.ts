@@ -1,4 +1,4 @@
-import { PartialType } from '@nestjs/mapped-types';
+import { PartialType, PickType } from '@nestjs/mapped-types';
 import { Exclude } from 'class-transformer';
 import {
   Allow,
@@ -34,9 +34,4 @@ export class CreateUserDto {
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {}
 
-export class UpdatePasswordDto {
-  @IsString()
-  @IsNotEmpty({ message: '密码不能为空' })
-  @Length(6, 20, { message: `密码长度必须大于$constraint1到$constraint2之间` })
-  password: string;
-}
+export class UpdatePasswordDto extends PickType(CreateUserDto, ['password']) {}

@@ -6,6 +6,7 @@ import {
   Patch,
   Param,
   Delete,
+  Query,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto, UpdatePasswordDto } from './user.dto';
@@ -13,6 +14,11 @@ import { CreateUserDto, UpdatePasswordDto } from './user.dto';
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
+
+  @Get('list')
+  getUserList(@Query() query: { page: number; size: number }) {
+    return this.userService.findAll(query);
+  }
 
   @Post()
   register(@Body() createUserDto: CreateUserDto) {
@@ -38,5 +44,10 @@ export class UserController {
     @Body() dto: UpdatePasswordDto,
   ) {
     return this.userService.resetPassword(userId, dto.password);
+  }
+
+  @Delete(':id')
+  deleteUser(@Param('id') id: number) {
+    return this.userService.deleteOne(id);
   }
 }

@@ -28,7 +28,6 @@ export class UserService {
   async findByUsername(username: string) {
     return this.userRep.findOne({
       where: { username },
-      select: ['id', 'username', 'password', 'avatar', 'signature'],
     });
   }
 
@@ -44,5 +43,19 @@ export class UserService {
     const user = await this.userRep.findOne({ where: { id } });
     user.password = hashSync(password);
     return await this.userRep.save(user);
+  }
+
+  // delete user
+  async deleteOne(id: number) {
+    return await this.userRep.delete(id);
+  }
+
+  async findAll(query: { page: number; size: number }) {
+    const { page, size } = query;
+    const [users, total] = await this.userRep.findAndCount({
+      skip: (page - 1) * size,
+      take: size,
+    });
+    return { users, total };
   }
 }

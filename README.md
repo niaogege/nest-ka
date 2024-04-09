@@ -9,6 +9,7 @@
 
 - @nestjs/typeorm
 - @nestjs/jwt
+- @nestjs/mapped-types
 
 ## 主要模块
 
@@ -19,6 +20,23 @@
 - common/guard
 - modules/auth
 - modules/user
+
+## 二方库
+
+- bcrypt.js 加解密密码，主要用到俩个api
+
+```js
+import { compareSync, hashSync } from 'bcryptjs';
+hashSync(password); // 加密
+compareSync(password, user.password); // 比较密码
+```
+
+- [映射类型: @nestjs/mapped-types](https://docs.nestjs.cn/10/techniques?id=%e6%98%a0%e5%b0%84%e7%b1%bb%e5%9e%8b)
+
+```ts
+import { PickType } from '@nestjs/mapped-types';
+export class UpdatePasswordDto extends PickType(CreateUserDto, ['password']) {}
+```
 
 ## Description
 
