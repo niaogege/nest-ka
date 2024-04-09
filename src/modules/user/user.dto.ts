@@ -33,3 +33,10 @@ export class CreateUserDto {
 }
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {}
+
+export class UpdatePasswordDto {
+  @IsString()
+  @IsNotEmpty({ message: '密码不能为空' })
+  @Length(6, 20, { message: `密码长度必须大于$constraint1到$constraint2之间` })
+  password: string;
+}

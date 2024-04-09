@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Like, Repository } from 'typeorm';
 import { hashSync } from 'bcryptjs';
-import { CreateUserDto, UpdateUserDto } from './user.dto';
+import { CreateUserDto } from './user.dto';
 import {
   CustomException,
   ErrorCode,
@@ -11,15 +11,12 @@ import { User } from './user.entities';
 
 @Injectable()
 export class UserService {
-  constructor(
-    @InjectRepository(User)
-    private userRep: Repository<User>,
-  ) {}
+  constructor(@InjectRepository(User) private userRep: Repository<User>) {}
+
+  // 注册用户
   async create(user: CreateUserDto) {
-    console.log(user, 'createUserDto');
     const { username } = user;
     const existUser = await this.findByUsername(username);
-    console.log(existUser, 'existUser');
     if (existUser && (existUser.id || existUser.username)) {
       throw new CustomException(ErrorCode.ERR_10001);
     }
@@ -27,27 +24,25 @@ export class UserService {
     newUser.password = hashSync(newUser.password, 10);
     return await this.userRep.save(newUser);
   }
-
-  findAll() {
-    return `This action returns all user`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} user`;
-  }
-
-  update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
-  }
-
-  remove(id: number) {
-    return `This action removes a #${id} user`;
-  }
-
+  // 根据用户名查找
   async findByUsername(username: string) {
     return this.userRep.findOne({
       where: { username },
       select: ['id', 'username', 'password', 'avatar', 'signature'],
     });
+  }
+
+  // 根据用户id进行查找
+  async findOne(id: number) {
+    return this.userRep.findOneBy({
+      id,
+    });
+  }
+
+  // 重设密码
+  async resetPassword(id: number, password: string) {
+    const user = await this.userRep.findOne({ where: { id } });
+    user.password = hashSync(password);
+    return await this.userRep.save(user);
   }
 }

@@ -13,10 +13,10 @@ export class User {
   @Column({ length: 20 })
   username: string;
 
-  // 查询时隐藏此列，可以设置长度30个字节
+  // 从数据库获取用户信息时 不读取password，可以设置长度30个字节
   @Column({
-    select: false,
-    length: 30,
+    // select: false,
+    length: 100,
   })
   password: string;
 

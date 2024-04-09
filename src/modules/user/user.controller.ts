@@ -8,35 +8,35 @@ import {
   Delete,
 } from '@nestjs/common';
 import { UserService } from './user.service';
-import { CreateUserDto, UpdateUserDto } from './user.dto';
+import { CreateUserDto, UpdatePasswordDto } from './user.dto';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  // register
-  @Post('/register')
+  @Post()
   register(@Body() createUserDto: CreateUserDto) {
     return this.userService.create(createUserDto);
   }
 
-  @Get()
-  findAll() {
-    return this.userService.findAll();
+  // @UseGuards(AuthGuard('jwt'))
+  @Get(':username')
+  findByUsername(@Param('username') username: string) {
+    console.log('name');
+    return this.userService.findByUsername(username);
   }
 
-  @Get(':id')
-  findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  @Get('/info/:id')
+  findByUserId(@Param('id') id: number) {
+    return this.userService.findOne(id);
   }
 
-  @Patch(':id')
-  update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
-    return this.userService.update(+id, updateUserDto);
-  }
-
-  @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.userService.remove(+id);
+  /** 管理员重置密码 */
+  @Patch('/reset/password/:userId')
+  resetPassword(
+    @Param('userId') userId: number,
+    @Body() dto: UpdatePasswordDto,
+  ) {
+    return this.userService.resetPassword(userId, dto.password);
   }
 }

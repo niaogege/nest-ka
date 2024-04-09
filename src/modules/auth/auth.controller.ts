@@ -7,39 +7,38 @@ import {
   Param,
   Delete,
   Req,
+  UseGuards,
 } from '@nestjs/common';
+import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
-import { RegisterUserDto, LoginDto } from './auth.dto';
-import { UserService } from '../user/user.service';
 import { ConfigService } from '@nestjs/config';
 import {
   CustomException,
   ErrorCode,
 } from '@/common/exceptions/custom.exception';
+import { UserService } from '../user/user.service';
+import { CreateUserDto } from '../user/user.dto';
+import { Public } from '../../common/decorators/public.decorator';
 
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
-    private userService: UserService,
+    private readonly userService: UserService,
     private configService: ConfigService,
   ) {}
 
+  @Public()
+  @UseGuards(AuthGuard('local'))
   @Post('login')
-  async login(@Req() req: any, @Body() body) {
+  async login(@Body() userDto: CreateUserDto) {
     // 判断验证码是否正确
-    if (
-      req.session?.code?.toLocaleLowerCase() !==
-      body.captcha?.toLocaleLowerCase()
-    ) {
-      throw new CustomException(ErrorCode.ERR_10003);
-    }
-    // return this.authService.login(req.user, req.session?.code);
+    return this.authService.login(userDto);
   }
 
+  @Public()
   @Post('register')
-  // @UseGuards(PreviewGuard)
-  async register(@Body() user: RegisterUserDto) {
+  async register(@Body() user: CreateUserDto) {
     return this.userService.create(user);
   }
 }
