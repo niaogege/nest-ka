@@ -32,7 +32,6 @@ export class AuthController {
   @UseGuards(AuthGuard('local'))
   @Post('login')
   async login(@Body() userDto: CreateUserDto) {
-    // 判断验证码是否正确
     return this.authService.login(userDto);
   }
 

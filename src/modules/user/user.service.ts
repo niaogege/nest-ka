@@ -26,9 +26,11 @@ export class UserService {
   }
   // 根据用户名查找
   async findByUsername(username: string) {
-    return this.userRep.findOne({
-      where: { username },
-    });
+    return this.userRep
+      .createQueryBuilder('user')
+      .addSelect('user.password')
+      .where('user.username=:username', { username })
+      .getOne();
   }
 
   // 根据用户id进行查找

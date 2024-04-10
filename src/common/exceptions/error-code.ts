@@ -17,6 +17,7 @@ export const ERR = {
   ERR_11006: { code: 11006, message: '非法操作' },
   ERR_11007: { code: 11007, message: '用户已禁用' },
   ERR_11008: { code: 11008, message: '角色已禁用' },
+  ERR_11009: { code: 11009, message: '当前header缺少token' },
   // OSS相关
   ERR_20001: { code: 20001, message: '当前创建的文件或目录已存在' },
   ERR_20002: { code: 20002, message: '无需操作' },

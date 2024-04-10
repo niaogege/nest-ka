@@ -2,10 +2,6 @@ import { Injectable } from '@nestjs/common';
 import { LoginDto } from './auth.dto';
 import { UserService } from '@/modules/user/user.service';
 import { JwtService } from '@nestjs/jwt';
-import {
-  CustomException,
-  ErrorCode,
-} from '@/common/exceptions/custom.exception';
 
 @Injectable()
 export class AuthService {
@@ -17,14 +13,11 @@ export class AuthService {
     return this.userService.create(loginDto);
   }
   async login(loginDto: LoginDto) {
-    console.log('service LoginDto', loginDto);
-    // const user = await this.userService.findByUsername(loginDto.password);
-    // if (user.password !== loginDto.password) {
-    //   throw new CustomException(ErrorCode.ERR_10002);
-    // }
+    const user = await this.userService.findByUsername(loginDto.username);
     const payload = {
       username: loginDto.username,
       password: loginDto.password,
+      userId: user.id,
     };
     const access_token = await this.jwtService.signAsync(payload);
     return {

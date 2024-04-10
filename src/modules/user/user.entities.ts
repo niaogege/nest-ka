@@ -3,7 +3,10 @@ import {
   Entity,
   PrimaryGeneratedColumn,
   CreateDateColumn,
+  OneToMany,
 } from 'typeorm';
+import { Exclude } from 'class-transformer';
+import { Bill } from '../bill/bill.entity';
 
 @Entity()
 export class User {
@@ -14,6 +17,7 @@ export class User {
   username: string;
 
   // 从数据库获取用户信息时 不读取password，可以设置长度30个字节
+  @Exclude()
   @Column({
     select: false,
     length: 100,
@@ -32,4 +36,8 @@ export class User {
 
   @CreateDateColumn()
   ctime: Date;
+
+  // 一个用户关联多个账单
+  @OneToMany(() => Bill, (bill) => bill.user)
+  bills: Bill[];
 }

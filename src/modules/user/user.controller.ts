@@ -7,7 +7,9 @@ import {
   Param,
   Delete,
   Query,
+  Req,
 } from '@nestjs/common';
+import { Request } from 'express';
 import { UserService } from './user.service';
 import { CreateUserDto, UpdatePasswordDto } from './user.dto';
 
@@ -20,15 +22,8 @@ export class UserController {
     return this.userService.findAll(query);
   }
 
-  @Post()
-  register(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
-  }
-
-  // @UseGuards(AuthGuard('jwt'))
   @Get(':username')
   findByUsername(@Param('username') username: string) {
-    console.log('name');
     return this.userService.findByUsername(username);
   }
 

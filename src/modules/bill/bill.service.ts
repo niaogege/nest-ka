@@ -1,19 +1,26 @@
-import { Injectable } from '@nestjs/common';
-import { CreateBillDto } from './dto/create-bill.dto';
-import { UpdateBillDto } from './dto/update-bill.dto';
-
+import { Injectable, Req } from '@nestjs/common';
+import { CreateBillDto, UpdateBillDto, QueryBillDto } from './bill.dto';
+import { InjectRepository } from '@nestjs/typeorm';
+import { In, Like, Repository } from 'typeorm';
+import { Bill } from './bill.entity';
 @Injectable()
 export class BillService {
-  create(createBillDto: CreateBillDto) {
-    return 'This action adds a new bill';
+  constructor(@InjectRepository(Bill) private billRep: Repository<Bill>) {}
+
+  async create(bill: CreateBillDto) {
+    return await this.billRep.save(bill);
   }
 
-  findAll() {
-    return `This action returns all bill`;
-  }
-
-  findOne(id: number) {
-    return `This action returns a #${id} bill`;
+  async findAll(query: QueryBillDto) {
+    const { page, size, userId } = query;
+    const [bills, total] = await this.billRep.findAndCount({
+      skip: (page - 1) * size,
+      take: size,
+      where: {
+        userId,
+      },
+    });
+    return { bills, total };
   }
 
   update(id: number, updateBillDto: UpdateBillDto) {
@@ -21,6 +28,6 @@ export class BillService {
   }
 
   remove(id: number) {
-    return `This action removes a #${id} bill`;
+    return this.billRep.delete(id);
   }
 }
