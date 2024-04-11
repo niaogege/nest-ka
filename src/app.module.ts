@@ -7,6 +7,7 @@ import { AppService } from './app.service';
 import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { BillModule } from './modules/bill/bill.module';
+import { CategoryModule } from './modules/category/category.module';
 @Module({
   imports: [
     /* 配置文件模块 */
@@ -34,6 +35,7 @@ import { BillModule } from './modules/bill/bill.module';
     UserModule,
     AuthModule,
     BillModule,
+    CategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

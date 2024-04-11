@@ -24,7 +24,8 @@ export class BillController {
     return this.billService.create(createBillDto);
   }
 
-  @Get()
+  // 查询当前用户的所有账单进行分页
+  @Get('list')
   findAll(@Query() query: { page; size }, @Req() req: Request) {
     const user = req[REQUEST_USER_KEY];
     const conditions = {
@@ -34,13 +35,34 @@ export class BillController {
     return this.billService.findAll(conditions);
   }
 
+  // 根据账单id进行查询
+  @Get(':id')
+  findOne(@Param('id') id: number, @Req() req: Request) {
+    const user = req[REQUEST_USER_KEY];
+    return this.billService.findOne(id, user.userId);
+  }
+
+  // 根据某一类型的账单
+  @Get('/type/:typeId')
+  findOneType(@Param() typeId: number) {
+    return this.billService.findOneType(typeId);
+  }
+
+  // 根据账单id更新账单
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateBillDto: UpdateBillDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateBillDto: UpdateBillDto,
+    @Req() req: Request,
+  ) {
+    const user = req[REQUEST_USER_KEY];
+    updateBillDto.userId = user.userId;
     return this.billService.update(+id, updateBillDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.billService.remove(+id);
+  remove(@Param('id') id: string, @Req() req: Request) {
+    const user = req[REQUEST_USER_KEY];
+    return this.billService.remove(+id, user.userId);
   }
 }

@@ -2,8 +2,15 @@
 
 - 完成个人记账系统服务端部分
 - 转型成为全栈工程师的路上
-- 签发jwt
-- 验证jwt
+- 产品目标：
+
+  1.账目表 accounts，存账目，里面包含各类账单
+
+  2.账单表 bills，跟账目之间是一对多
+
+  3.用户表 users，包含账目表，多对多
+
+  4.记账类目类型 categorys，跟用户是多对多
 
 ## 主要架构
 
@@ -48,6 +55,10 @@ compareSync(password, user.password); // 比较密码
 import { PickType } from '@nestjs/mapped-types';
 export class UpdatePasswordDto extends PickType(CreateUserDto, ['password']) {}
 ```
+
+## 问题记录
+
+- post/get/delete请求参数不合法，如何规避
 
 ## 参考
 

@@ -24,16 +24,22 @@ export class Bill {
   amount: number;
 
   @Column({
-    comment: '消费类型',
+    comment: '消费类别类型',
     nullable: true,
   })
-  typeName: string;
+  categoryName: string;
 
   @Column({
-    comment: '消费类型id',
+    comment: '消费类别类型id',
     nullable: true,
   })
-  typeId: number;
+  categoryId: number;
+
+  @Column({
+    comment: '支出1或者收入2',
+    default: 1,
+  })
+  payType: number;
 
   @Column({
     comment: '备注信息',
@@ -41,7 +47,10 @@ export class Bill {
   remark: string;
 
   // 多对一 多个账单对应一个用户
-  @ManyToOne(() => User, (user) => user.bills)
+  @ManyToOne(() => User, (user) => user.bills, {
+    createForeignKeyConstraints: false,
+    cascade: true, // 级连只能写在ManyToOne这侧
+  })
   @JoinColumn()
   user: User;
 

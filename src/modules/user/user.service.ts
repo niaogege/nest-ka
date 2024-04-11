@@ -33,10 +33,14 @@ export class UserService {
       .getOne();
   }
 
-  // 根据用户id进行查找
+  // 根据用户id进行查找 并且关联bill
   async findOne(id: number) {
-    return this.userRep.findOneBy({
-      id,
+    return this.userRep.findOne({
+      where: { id },
+      relations: {
+        bills: true,
+        categorys: true,
+      },
     });
   }
 

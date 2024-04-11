@@ -30,6 +30,11 @@ export class CreateUserDto {
   @IsString()
   @IsOptional()
   avatar?: string;
+
+  // 个人创建的消费种类类型
+  @IsOptional()
+  @IsArray()
+  typeIds?: number[];
 }
 
 export class UpdateUserDto extends PartialType(CreateUserDto) {}
