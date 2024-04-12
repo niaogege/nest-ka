@@ -50,9 +50,6 @@ export class BillService {
       where: {
         categoryId,
       },
-      relations: {
-        user: true,
-      },
     });
   }
 }

@@ -8,6 +8,7 @@ import { UserModule } from './modules/user/user.module';
 import { AuthModule } from './modules/auth/auth.module';
 import { BillModule } from './modules/bill/bill.module';
 import { CategoryModule } from './modules/category/category.module';
+import { AccountModule } from './modules/account/account.module';
 @Module({
   imports: [
     /* 配置文件模块 */
@@ -36,6 +37,7 @@ import { CategoryModule } from './modules/category/category.module';
     AuthModule,
     BillModule,
     CategoryModule,
+    AccountModule,
   ],
   controllers: [AppController],
   providers: [AppService],

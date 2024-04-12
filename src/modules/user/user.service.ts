@@ -37,10 +37,9 @@ export class UserService {
   async findOne(id: number) {
     return this.userRep.findOne({
       where: { id },
-      relations: {
-        bills: true,
-        categorys: true,
-      },
+      // relations: {
+      //   // bills: true,
+      // },
     });
   }
 

@@ -1,4 +1,3 @@
-import { User } from '../user/user.entities';
 import {
   Column,
   Entity,
@@ -6,8 +5,11 @@ import {
   CreateDateColumn,
   UpdateDateColumn,
   ManyToMany,
+  ManyToOne,
+  OneToMany,
 } from 'typeorm';
-
+import { Bill } from '../bill/bill.entity';
+import { Account } from '../account/account.entity';
 @Entity({
   comment: 'cate 账目类型',
   name: 'category',
@@ -25,7 +27,7 @@ export class Category {
   categoryName: string;
 
   @Column({
-    comment: '支出1或者收入2',
+    comment: '支出1或者收入2or3',
     default: 1,
   })
   payType: number;
@@ -36,11 +38,13 @@ export class Category {
   })
   userId: number;
 
-  // 多对多
-  @ManyToMany(() => User, (user) => user.categorys, {
-    createForeignKeyConstraints: false,
-  })
-  user: User[];
+  // 类目只能在账目里新建 账目的拥有者才能建类目
+  @ManyToOne(() => Account, (account) => account.categorys)
+  shareAccount: Account;
+
+  // 一条类目阔以有多条账单
+  @OneToMany(() => Bill, (bill) => bill.category)
+  bills: Bill[];
 
   @CreateDateColumn({
     comment: '创建时间',

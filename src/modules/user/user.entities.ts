@@ -6,12 +6,10 @@ import {
   UpdateDateColumn,
   OneToMany,
   ManyToMany,
-  JoinTable,
 } from 'typeorm';
 import { Exclude } from 'class-transformer';
+import { Account } from '../account/account.entity';
 import { Bill } from '../bill/bill.entity';
-import { Category } from '../category/category.entity';
-
 @Entity()
 export class User {
   @PrimaryGeneratedColumn() //默认主键 自增
@@ -38,17 +36,16 @@ export class User {
   })
   avatar: string;
 
-  // 一个用户关联多个账单
-  @OneToMany(() => Bill, (bill) => bill.user)
-  bills: Bill[];
+  // 一个用户拥有多个账本
+  @OneToMany(() => Account, (account) => account.owner)
+  ownedAccounts: Account[];
 
-  // 多对多 用户阔以自定义设置类型 一个类型阔以共享用户
-  @ManyToMany(() => Category, (category) => category.user, {
-    createForeignKeyConstraints: false,
-    cascade: true,
-  })
-  @JoinTable()
-  categorys: Category[];
+  // 一个用户阔以共享多个账本
+  @ManyToMany(() => Account, (account) => account.sharedUsers)
+  shareAccounts: Account[]; // 共享的账目清单
+
+  // @OneToMany(() => Bill, (bill) => bill.user)
+  // bills: Bill[];
 
   @CreateDateColumn({
     comment: '创建时间',
@@ -58,5 +55,5 @@ export class User {
   @UpdateDateColumn({
     comment: '更新时间',
   })
-  uptimeTime: Date;
+  upTime: Date;
 }

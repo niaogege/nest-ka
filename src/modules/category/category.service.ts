@@ -17,7 +17,7 @@ export class CategoryService {
   async findAll() {
     return await this.categoryRep.find({
       relations: {
-        user: true,
+        bills: true,
       },
     });
   }
@@ -26,7 +26,7 @@ export class CategoryService {
     return await this.categoryRep.find({
       where: { id },
       relations: {
-        user: true,
+        bills: true,
       },
     });
   }

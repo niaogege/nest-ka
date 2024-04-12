@@ -9,6 +9,8 @@ import {
   JoinColumn,
 } from 'typeorm';
 
+import { Account } from '../account/account.entity';
+import { Category } from '../category/category.entity';
 @Entity({
   name: 'bill-test',
   comment: 'bill for test',
@@ -36,7 +38,7 @@ export class Bill {
   categoryId: number;
 
   @Column({
-    comment: '支出1或者收入2',
+    comment: '支出1或者收入2或者不计收支3',
     default: 1,
   })
   payType: number;
@@ -46,13 +48,17 @@ export class Bill {
   })
   remark: string;
 
-  // 多对一 多个账单对应一个用户
-  @ManyToOne(() => User, (user) => user.bills, {
-    createForeignKeyConstraints: false,
-    cascade: true, // 级连只能写在ManyToOne这侧
-  })
-  @JoinColumn()
-  user: User;
+  // 一个账单只能属于一个共享账目
+  @ManyToOne(() => Account, (account) => account.bills)
+  shareAccount: Account;
+
+  // 一条账单只能属于一个类目
+  @ManyToOne(() => Category, (category) => category.bills)
+  category: Category;
+
+  // // 只能有一个用户创建
+  // @ManyToOne(() => User, (user) => user.bills)
+  // user: User;
 
   @Column({
     comment: '用户id',
