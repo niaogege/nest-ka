@@ -3,6 +3,8 @@ import { BillService } from './bill.service';
 import { BillController } from './bill.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { Bill } from './bill.entity';
+
+// 账单表
 @Module({
   imports: [TypeOrmModule.forFeature([Bill])],
   controllers: [BillController],

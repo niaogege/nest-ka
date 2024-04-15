@@ -9,9 +9,8 @@ import {
   Query,
   Req,
 } from '@nestjs/common';
-import { Request } from 'express';
 import { UserService } from './user.service';
-import { CreateUserDto, UpdatePasswordDto } from './user.dto';
+import { UpdatePasswordDto } from './user.dto';
 
 @Controller('user')
 export class UserController {

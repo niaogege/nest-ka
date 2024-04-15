@@ -28,11 +28,14 @@ export class Account {
   })
   accountName: string;
 
+  @Column({
+    comment: 'userId 账单拥有者',
+  })
+  userId: number;
+
   // 一个账本只能有一个用户创建
   @ManyToOne(() => User, (user) => user.ownedAccounts)
-  @JoinColumn({
-    name: 'ownerId',
-  })
+  @JoinColumn({ name: 'ownerId' })
   owner: User;
 
   // 共享账本阔以有多个用户

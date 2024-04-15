@@ -7,11 +7,15 @@ import {
   CustomException,
   ErrorCode,
 } from '@/common/exceptions/custom.exception';
+import { AccountService } from '../account/account.service';
 import { User } from './user.entities';
 
 @Injectable()
 export class UserService {
-  constructor(@InjectRepository(User) private userRep: Repository<User>) {}
+  constructor(
+    @InjectRepository(User) private userRep: Repository<User>,
+    private accountService: AccountService,
+  ) {}
 
   // 注册用户
   async create(user: CreateUserDto) {
@@ -22,7 +26,15 @@ export class UserService {
     }
     const newUser = this.userRep.create(user);
     newUser.password = hashSync(newUser.password, 10);
-    return await this.userRep.save(newUser);
+    const res = await this.userRep.save(newUser);
+    if (!newUser.ownedAccounts) {
+      await this.accountService.create({
+        accountName: '默认账本',
+        userId: res.id,
+        sharedUserIds: [res.id],
+      });
+    }
+    return res;
   }
   // 根据用户名查找
   async findByUsername(username: string) {
@@ -37,9 +49,10 @@ export class UserService {
   async findOne(id: number) {
     return this.userRep.findOne({
       where: { id },
-      // relations: {
-      //   // bills: true,
-      // },
+      relations: {
+        ownedAccounts: true,
+        shareAccounts: true,
+      },
     });
   }
 
