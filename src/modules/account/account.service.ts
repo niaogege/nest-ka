@@ -13,28 +13,31 @@ export class AccountService {
   ) {}
 
   async create(createAccountDto: CreateAccountDto) {
-    const existAccount = await this.accountRep.findOne({
-      where: [{ accountName: createAccountDto.accountName }],
-    });
-    if (existAccount) {
-      throw new BadRequestException('账目已经存在');
-    }
     const account = this.accountRep.create(createAccountDto);
     if (createAccountDto.sharedUserIds) {
+      const ids = createAccountDto.sharedUserIds.split(',').map((e) => +e);
       const users = await this.userRep.find({
         where: {
-          id: In(createAccountDto.sharedUserIds),
+          id: In(ids),
         },
       });
       account.sharedUsers = users;
     }
+    if (createAccountDto.userId) {
+      const user = await this.userRep.findOne({
+        where: {
+          id: createAccountDto.userId,
+        },
+      });
+      account.owner = user;
+    }
     return await this.accountRep.save(account);
   }
   // 最新的排在前面
-  async findAll(id: number) {
+  async findAll(userId: number) {
     return this.accountRep.find({
       order: { upTime: 'DESC' },
-      where: { userId: id },
+      where: { userId },
     });
   }
 
@@ -48,17 +51,36 @@ export class AccountService {
     });
   }
 
+  // 查询所有账本
+  async findAllList(query) {
+    const { page, size } = query;
+    const [accounts, total] = await this.accountRep.findAndCount({
+      skip: (page - 1) * size, // offset
+      take: size, // limit
+    });
+    return { accounts, total };
+  }
+
+  // 更新账目 无非是更新名称和分享者
   async update(id: number, updateAccountDto: UpdateAccountDto) {
     const curAccount = await this.findOne(id);
     if (!curAccount) {
       throw new BadRequestException('账本不存在或者已删除');
     }
-    const newBill = this.accountRep.merge(curAccount, updateAccountDto);
-    return await this.accountRep.save(newBill);
+    if (updateAccountDto.sharedUserIds) {
+      const ids = updateAccountDto.sharedUserIds.split(',').map((e) => +e);
+      const users = await this.userRep.find({
+        where: {
+          id: In(ids),
+        },
+      });
+      curAccount.sharedUsers = users;
+    }
+    const newAccount = this.accountRep.merge(curAccount, updateAccountDto);
+    return await this.accountRep.save(newAccount);
   }
 
   async remove(id: number) {
-    console.log(id, 'iddd');
     await this.accountRep.delete(id);
     return true;
   }

@@ -25,6 +25,11 @@ export class AccountController {
     return this.accountService.create(createAccountDto);
   }
 
+  @Get('list')
+  findAllList(@Query() query: { page: number; size: number }) {
+    return this.accountService.findAllList(query);
+  }
+
   @Get()
   findAll(@Query() query: { userId: number }) {
     return this.accountService.findAll(query.userId);

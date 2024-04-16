@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Req,
+  Query,
 } from '@nestjs/common';
 import { CategoryService } from './category.service';
 import { CreateCategoryDto, UpdateCategoryDto } from './category.dto';
@@ -18,14 +19,20 @@ export class CategoryController {
 
   @Post()
   create(@Body() createCategoryDto: CreateCategoryDto, @Req() req) {
-    // const user = req[REQUEST_USER_KEY];
-    // createCategoryDto.userId = user.userId;
+    const user = req[REQUEST_USER_KEY];
+    createCategoryDto.userId = user.userId;
     return this.categoryService.create(createCategoryDto);
   }
 
+  @Get('list')
+  findAllList(@Query() query: { page: number; size: number }) {
+    return this.categoryService.findAllList(query);
+  }
+
   @Get()
-  findAll() {
-    return this.categoryService.findAll();
+  findAll(@Req() req) {
+    const user = req[REQUEST_USER_KEY];
+    return this.categoryService.findAll(user.userId);
   }
 
   @Get(':id')

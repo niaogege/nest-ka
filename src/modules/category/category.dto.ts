@@ -17,12 +17,18 @@ export class CreateCategoryDto {
   categoryName: string;
 
   @IsNumber()
-  // @IsNotEmpty({ message: '用户id不能为空' })
-  @IsOptional()
+  @IsNotEmpty({ message: '用户id不能为空' })
+  // @IsOptional()
   userId: number;
 
   @IsNumber()
   @IsOptional()
   payType: number;
+
+  @IsNumber()
+  @IsNotEmpty({
+    message: '新建账单必须要传入账本',
+  })
+  shareAccountId: number;
 }
 export class UpdateCategoryDto extends PartialType(CreateCategoryDto) {}

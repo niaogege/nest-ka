@@ -33,7 +33,7 @@ export class Account {
   })
   userId: number;
 
-  // 一个账本只能有一个用户创建
+  // 一个账本只能有一个用户创建 只能在one这头进行重命名
   @ManyToOne(() => User, (user) => user.ownedAccounts)
   @JoinColumn({ name: 'ownerId' })
   owner: User;

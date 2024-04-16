@@ -26,6 +26,12 @@ export class UserController {
     return this.userService.findByUsername(username);
   }
 
+  @Get('/info/many')
+  findMany(@Query() query: { ids: string }) {
+    const ids = query.ids.split(',').map((e) => +e);
+    return this.userService.findMany(ids);
+  }
+
   @Get('/info/:id')
   findByUserId(@Param('id') id: number) {
     return this.userService.findOne(id);

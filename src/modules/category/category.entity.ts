@@ -22,7 +22,6 @@ export class Category {
 
   @Column({
     comment: 'name 类型名称',
-    // unique: true,
   })
   categoryName: string;
 

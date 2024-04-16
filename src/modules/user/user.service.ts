@@ -31,7 +31,7 @@ export class UserService {
       await this.accountService.create({
         accountName: '默认账本',
         userId: res.id,
-        sharedUserIds: [res.id],
+        sharedUserIds: '' + res.id,
       });
     }
     return res;
@@ -54,6 +54,14 @@ export class UserService {
         shareAccounts: true,
       },
     });
+  }
+  async findMany(ids: number[]) {
+    const users = await this.userRep.find({
+      where: {
+        id: In(ids),
+      },
+    });
+    return users;
   }
 
   // 重设密码

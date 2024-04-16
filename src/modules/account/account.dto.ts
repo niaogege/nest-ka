@@ -20,9 +20,10 @@ export class CreateAccountDto {
   @IsNotEmpty({ message: '账目拥有者不能缺少' })
   userId: number;
 
-  @IsArray()
+  // 账目的分享者名单
+  @IsString()
   @IsOptional()
-  sharedUserIds: number[];
+  sharedUserIds: string;
 }
 
 export class UpdateAccountDto extends PartialType(CreateAccountDto) {}

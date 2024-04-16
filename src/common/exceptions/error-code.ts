@@ -18,12 +18,14 @@ export const ERR = {
   ERR_11007: { code: 11007, message: '用户已禁用' },
   ERR_11008: { code: 11008, message: '角色已禁用' },
   ERR_11009: { code: 11009, message: '当前header缺少token' },
-  // OSS相关
+  // Account 账单相关
   ERR_20001: { code: 20001, message: '当前创建的文件或目录已存在' },
   ERR_20002: { code: 20002, message: '无需操作' },
   ERR_20003: { code: 20003, message: '已超出支持的最大处理数量' },
-  // 环境相关
+  // Category 类目相关
   ERR_30001: { code: 30001, message: '预览环境不支持此操作' },
+
+  // Bill 账单 相关
 } as const;
 
 export type ErrInfo = ValueOf<typeof ERR>;
