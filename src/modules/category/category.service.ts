@@ -1,7 +1,7 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
 import { CreateCategoryDto, UpdateCategoryDto } from './category.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { Repository, In } from 'typeorm';
 import { Category } from './category.entity';
 import { AccountService } from '../account/account.service';
 
@@ -14,7 +14,8 @@ export class CategoryService {
 
   async create(createCategoryDto: CreateCategoryDto) {
     const category = this.categoryRep.create(createCategoryDto);
-    if (createCategoryDto.shareAccountId) {
+    // userId != 0 代表为某一账本所共有
+    if (createCategoryDto.userId != 0 && createCategoryDto.shareAccountId) {
       const curAccount = await this.accountService.findOne(
         createCategoryDto.shareAccountId,
       );
@@ -38,16 +39,19 @@ export class CategoryService {
     });
   }
 
-  async findAllList(query) {
+  async findAllList(query, userId) {
     const { page, size } = query;
     const [categorys, total] = await this.categoryRep.findAndCount({
       skip: (page - 1) * size, // offset
       take: size, // limit
+      where: {
+        userId: In([userId, 0]),
+      },
     });
     return { categorys, total };
   }
   async findOne(id: number) {
-    return await this.categoryRep.find({
+    return await this.categoryRep.findOne({
       where: { id },
       relations: {
         bills: true,
@@ -55,11 +59,30 @@ export class CategoryService {
     });
   }
 
-  update(id: number, updateCategoryDto: UpdateCategoryDto) {
-    return `This action updates a #${id} category`;
+  async update(id: number, updateCategoryDto: UpdateCategoryDto) {
+    const curCategory = await this.findOne(id);
+    if (!curCategory) {
+      throw new BadRequestException('当前类目不存在');
+    }
+    if (updateCategoryDto.userId != 0 && updateCategoryDto.shareAccountId) {
+      const curAccount = await this.accountService.findOne(
+        updateCategoryDto.shareAccountId,
+      );
+      if (curAccount.userId !== updateCategoryDto.userId) {
+        throw new BadRequestException('当前类目不是当前账本创建的');
+      }
+      curCategory.shareAccount = curAccount;
+    }
+    const newCategory = this.categoryRep.merge(curCategory, updateCategoryDto);
+    return await this.categoryRep.save(newCategory);
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} category`;
+  async remove(id: number, userId: number) {
+    const curCategory = await this.findOne(id);
+    if (curCategory.userId !== userId) {
+      throw new BadRequestException('当前类目不是本人创建的，无权删除');
+    }
+    await this.categoryRep.delete(id);
+    return true;
   }
 }

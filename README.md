@@ -21,6 +21,7 @@
 - 账目表跟账单表的关联
 - 账目表跟类目表的关联
 - 类目表跟账单表的关联
+- 如何进行自动化部署
 
 ### 主要模块
 
@@ -67,6 +68,7 @@ export class UpdatePasswordDto extends PickType(CreateUserDto, ['password']) {}
 ## 问题记录
 
 - post/get/delete请求参数不合法，如何规避
+- 邀请他人记账，这个怎么做的?邀请其实就是共享，更新账本信息，拿到邀请人的信息即可
 
 ## 参考
 

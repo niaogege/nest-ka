@@ -3,12 +3,25 @@ import { CreateBillDto, UpdateBillDto, QueryBillDto } from './bill.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Like, Repository } from 'typeorm';
 import { Bill } from './bill.entity';
+import { AccountService } from '../account/account.service';
+import { CategoryService } from '../category/category.service';
 @Injectable()
 export class BillService {
-  constructor(@InjectRepository(Bill) private billRep: Repository<Bill>) {}
+  constructor(
+    @InjectRepository(Bill) private billRep: Repository<Bill>,
+    private accountService: AccountService,
+    private categoryService: CategoryService,
+  ) {}
 
   async create(bill: CreateBillDto) {
-    return await this.billRep.save(bill);
+    const curBill = this.billRep.create(bill);
+    if (bill.accountId) {
+      curBill.shareAccount = await this.accountService.findOne(bill.accountId);
+    }
+    if (bill.categoryId) {
+      curBill.category = await this.categoryService.findOne(bill.categoryId);
+    }
+    return await this.billRep.save(curBill);
   }
 
   async findAll(query: QueryBillDto) {

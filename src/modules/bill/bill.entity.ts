@@ -26,12 +26,6 @@ export class Bill {
   amount: number;
 
   @Column({
-    comment: '消费类别类型',
-    nullable: true,
-  })
-  categoryName: string;
-
-  @Column({
     comment: '消费类别类型id',
     nullable: true,
   })

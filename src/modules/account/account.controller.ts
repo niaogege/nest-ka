@@ -41,7 +41,13 @@ export class AccountController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAccountDto: UpdateAccountDto) {
+  update(
+    @Param('id') id: string,
+    @Body() updateAccountDto: UpdateAccountDto,
+    @Req() req: Request,
+  ) {
+    const user = req[REQUEST_USER_KEY];
+    updateAccountDto.userId = user.userId;
     return this.accountService.update(+id, updateAccountDto);
   }
 

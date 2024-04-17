@@ -32,7 +32,7 @@ export class Category {
   payType: number;
 
   @Column({
-    comment: '用户id',
+    comment: '用户id,传0代表默认类目',
     default: 0,
   })
   userId: number;

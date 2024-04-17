@@ -48,6 +48,10 @@ export class AccountService {
           id,
         },
       ],
+      relations: {
+        sharedUsers: true,
+        owner: true,
+      },
     });
   }
 
@@ -67,8 +71,14 @@ export class AccountService {
     if (!curAccount) {
       throw new BadRequestException('账本不存在或者已删除');
     }
+    if (updateAccountDto.userId != curAccount.userId) {
+      throw new BadRequestException('只有当前创建者才有权限更改');
+    }
     if (updateAccountDto.sharedUserIds) {
-      const ids = updateAccountDto.sharedUserIds.split(',').map((e) => +e);
+      const ids = updateAccountDto.sharedUserIds
+        .split(',')
+        .map((e) => +e)
+        .filter((e) => e != curAccount.userId);
       const users = await this.userRep.find({
         where: {
           id: In(ids),
@@ -77,6 +87,14 @@ export class AccountService {
       curAccount.sharedUsers = users;
     }
     const newAccount = this.accountRep.merge(curAccount, updateAccountDto);
+    if (!newAccount.owner) {
+      const user = await this.userRep.findOne({
+        where: {
+          id: updateAccountDto.userId,
+        },
+      });
+      newAccount.owner = user;
+    }
     return await this.accountRep.save(newAccount);
   }
 

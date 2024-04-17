@@ -18,11 +18,11 @@ export class CreateBillDto {
   amount: number;
 
   @IsNumber()
-  @IsNotEmpty({ message: '消费类型Id不能为空' })
-  typeId: number;
+  @IsNotEmpty({ message: '消费类目Id不能为空' })
+  categoryId: number;
 
   @IsString()
-  @IsOptional()
+  @IsOptional({ message: '记账备注' })
   remark?: string;
 
   @IsNumber()
@@ -30,8 +30,12 @@ export class CreateBillDto {
   userId: number;
 
   @IsNumber()
-  @IsOptional()
+  @IsOptional({ message: '支出1或者收入2或者不计收支3' })
   payType: number;
+
+  @IsNumber()
+  @IsNotEmpty({ message: '账目id不能为空' })
+  accountId: number;
 }
 
 export class UpdateBillDto extends CreateBillDto {}

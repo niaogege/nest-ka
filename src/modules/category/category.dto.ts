@@ -13,11 +13,11 @@ import {
 } from 'class-validator';
 export class CreateCategoryDto {
   @IsString()
-  @IsNotEmpty({ message: '类型定义名称不能为空' })
+  @IsNotEmpty({ message: '类型名称不能为空' })
   categoryName: string;
 
   @IsNumber()
-  @IsNotEmpty({ message: '用户id不能为空' })
+  @IsNotEmpty({ message: '用户id不能为空,userId=0代表默认类目' })
   // @IsOptional()
   userId: number;
 

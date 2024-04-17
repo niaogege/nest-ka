@@ -1,9 +1,8 @@
 {
-  "name": "nest-demo",
+  "name": "nest-ka",
   "version": "0.0.1",
-  "description": "",
-  "author": "",
-  "private": true,
+  "description": "个人记账后端",
+  "author": "chendapeng",
   "license": "UNLICENSED",
   "scripts": {
     "build": "nest build",

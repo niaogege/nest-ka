@@ -17,16 +17,20 @@ import { REQUEST_USER_KEY } from '@/common/constants';
 export class CategoryController {
   constructor(private readonly categoryService: CategoryService) {}
 
+  // userId:0 默认类目
   @Post()
   create(@Body() createCategoryDto: CreateCategoryDto, @Req() req) {
     const user = req[REQUEST_USER_KEY];
-    createCategoryDto.userId = user.userId;
+    if (createCategoryDto.userId != 0) {
+      createCategoryDto.userId = user.userId;
+    }
     return this.categoryService.create(createCategoryDto);
   }
 
   @Get('list')
-  findAllList(@Query() query: { page: number; size: number }) {
-    return this.categoryService.findAllList(query);
+  findAllList(@Query() query: { page: number; size: number }, @Req() req) {
+    const user = req[REQUEST_USER_KEY];
+    return this.categoryService.findAllList(query, +user.userId);
   }
 
   @Get()
@@ -49,7 +53,8 @@ export class CategoryController {
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
-    return this.categoryService.remove(+id);
+  remove(@Param('id') id: string, @Req() req) {
+    const user = req[REQUEST_USER_KEY];
+    return this.categoryService.remove(+id, +user.userId);
   }
 }
