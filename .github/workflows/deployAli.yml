@@ -1,0 +1,39 @@
+name: DeployAli
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  TARGET_DIR: /www/web/api
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Copy files to server
+        uses: cross-the-world/ssh-scp-ssh-pipelines@latest
+        env:
+          WELCOME: 'welcome CPP server'
+          LASTSSH: 'after copying success'
+        with:
+          host: '47.101.50.136'
+          user: 'root'
+          pass: ${{ secrets.ALI_PASSWORD }}
+          connect_timeout: 20s
+          first_ssh: |-
+            rm -rf $TARGET_DIR
+            echo $WELCOME   
+            mkdir -p $TARGET_DIR
+          scp: |-
+            './*' => $TARGET_DIR/
+          last_ssh: |-
+            echo $LASTSSH
+            pnpm install
+            pnpm run build
+            pm2 start
+            # pm2 restart nest-ka
+            pm2 list
