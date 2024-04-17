@@ -20,6 +20,7 @@ import { AccountModule } from './modules/account/account.module';
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
+        console.log(process.env.DB_HOST, 'process.env.DB_HOST');
         return {
           type: 'mysql',
           autoLoadEntities: true,

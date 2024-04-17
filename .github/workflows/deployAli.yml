@@ -20,7 +20,7 @@ jobs:
           WELCOME: 'welcome CPP server'
           LASTSSH: 'after copying success'
         with:
-          host: '47.101.50.136'
+          host: ${{secrets.ALI_ADDRESS}}
           user: 'root'
           pass: ${{ secrets.ALI_PASSWORD }}
           connect_timeout: 20s
@@ -39,5 +39,5 @@ jobs:
             pnpm -v
             pnpm install
             pnpm run build
-            pm2 start
+            pm2 start -- DB_PWD=${{ secrets.ALI_PASSWORD }} DB_HOST=${{secrets.ALI_ADDRESS}}
             pm2 list
