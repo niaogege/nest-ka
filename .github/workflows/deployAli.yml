@@ -22,7 +22,7 @@ jobs:
         with:
           host: ${{secrets.ALI_ADDRESS}}
           user: 'root'
-          pass: ${{ secrets.ALI_PASSWORD }}
+          pass: ${{secrets.ALI_PASSWORD}}
           connect_timeout: 20s
           first_ssh: |-
             rm -rf $TARGET_DIR
@@ -39,5 +39,5 @@ jobs:
             pnpm -v
             pnpm install
             pnpm run build
-            pm2 start -- --DB_USER=${{ secrets.ALI_DB_USER }} --DB_PWD=${{ secrets.ALI_DB_PWD }} --DB_HOST=${{secrets.ALI_DB_HOST}}
+            pm2 start -- --DB_USER=${{secrets.ALI_DB_USER}} --DB_PWD=${{secrets.ALI_DB_PWD}} --DB_HOST=${{secrets.ALI_DB_HOST}}
             pm2 list
