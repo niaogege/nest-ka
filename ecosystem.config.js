@@ -8,8 +8,8 @@ module.exports = {
       exec_mode: 'cluster',
       max_memory_restart: '2G',
       log_date_format: 'YYYY-MM-DD HH:mm:ss:SS',
-      error_file: `/www/web/${PR}/error.log`,
-      out_file: `/www/web/${PR}/out.log`,
+      // error_file: `/www/web/${PR}/error.log`,
+      // out_file: `/www/web/${PR}/out.log`,
     },
   ],
 };
