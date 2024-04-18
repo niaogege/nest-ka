@@ -4,6 +4,6 @@ import { Injectable } from '@nestjs/common';
 export class AppService {
   getHello(): string {
     console.log(process.env.DB_HOST, 'process.env.DB_HOST');
-    return 'Hello World!' + process.env.DB_HOST;
+    return 'Hello World!' + process.env.DB_HOST + process.env.DB_USER;
   }
 }
