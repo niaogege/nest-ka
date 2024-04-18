@@ -32,13 +32,10 @@ jobs:
             './*' => $TARGET_DIR/
           last_ssh: |-
             cd $TARGET_DIR
-            pwd
-            echo $HOME
             npm -v
             node -v
             pnpm -v
             pnpm install
             pnpm run build
             pm2 start
-            # pm2 start -- --DB_USER=root --DB_PWD=291003932Cpp@ --DB_HOST=localhost --DB_DATABASE=cost --DB_PORT=3306
             pm2 list
