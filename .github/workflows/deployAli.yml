@@ -34,6 +34,9 @@ jobs:
             cd $TARGET_DIR
             pwd
             echo $HOME
+            echo ${{secrets.ALI_DB_USER}}
+            echo ${{secrets.ALI_DB_PWD}} 
+            echo ${{secrets.ALI_DB_HOST}}
             npm -v
             node -v
             pnpm -v
