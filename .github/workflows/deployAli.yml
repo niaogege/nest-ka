@@ -17,8 +17,9 @@ jobs:
       - name: Copy files to server
         uses: cross-the-world/ssh-scp-ssh-pipelines@latest
         env:
-          WELCOME: 'welcome CPP server'
-          LASTSSH: 'after copying success'
+          DB_PWD: ${{ secrets.ALI_DB_PWD }}
+          DB_USER: ${{ secrets.ALI_DB_USER }}
+          DB_HOST: ${{ secrets.ALI_DB_HOST }}
         with:
           host: ${{secrets.ALI_ADDRESS}}
           user: 'root'
@@ -26,7 +27,6 @@ jobs:
           connect_timeout: 20s
           first_ssh: |-
             rm -rf $TARGET_DIR
-            echo $WELCOME   
             mkdir -p $TARGET_DIR
           scp: |-
             './*' => $TARGET_DIR/
@@ -37,27 +37,16 @@ jobs:
             pnpm -v
             pnpm install
             pnpm run build
-      - name: Configure PM2
-        run: |
-          cd $TARGET_DIR
-          echo $WELCOME 
-          echo "module.exports = { apps : [ { 
-            name: 'my-nestjs-ka', 
-            script: './dist/main.js', 
-            env: { 
-              NODE_ENV: 'production', 
-              DB_DATABASE: 'cost',
-              DB_PWD: '${DB_PWD}', 
-              DB_USER: '${DB_USER}',
-              DB_HOST: '${DB_HOST}',
-              JWT_SECRET: 'cpp&wmh' 
-            } } ] }" > ecosystem.config.js
-        env:
-          DB_PWD: ${{ secrets.ALI_DB_PWD }}
-          DB_USER: ${{ secrets.ALI_DB_USER }}
-          DB_HOST: ${{ secrets.ALI_DB_HOST }}
-      - name: Start server with PM2
-        run: |
-          cd $TARGET_DIR
-          echo $WELCOME 
-          pm2 start ecosystem.config.js
+            touch ecosystem.config.js
+            echo "module.exports = { apps : [ { 
+              name: 'my-nestjs-ka', 
+              script: './dist/main.js', 
+              env: { 
+                NODE_ENV: 'production', 
+                DB_DATABASE: 'cost',
+                DB_PWD: '${DB_PWD}', 
+                DB_USER: '${DB_USER}',
+                DB_HOST: '${DB_HOST}',
+                JWT_SECRET: 'cpp&wmh' 
+              } } ] };" > ecosystem.config.js
+            pm2 start ecosystem.config.js
