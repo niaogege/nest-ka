@@ -39,6 +39,8 @@ jobs:
             pnpm run build
       - name: Configure PM2
         run: |
+          cd $TARGET_DIR
+          echo $WELCOME 
           echo "module.exports = { apps : [ { 
             name: 'my-nestjs-ka', 
             script: './dist/main.js', 
@@ -56,4 +58,6 @@ jobs:
           DB_HOST: ${{ secrets.ALI_DB_HOST }}
       - name: Start server with PM2
         run: |
+          cd $TARGET_DIR
+          echo $WELCOME 
           pm2 start ecosystem.config.js
