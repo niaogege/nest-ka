@@ -37,5 +37,23 @@ jobs:
             pnpm -v
             pnpm install
             pnpm run build
-            pm2 start
-            pm2 list
+      - name: Configure PM2
+        run: |
+          echo "module.exports = { apps : [ { 
+            name: 'my-nestjs-ka', 
+            script: './dist/main.js', 
+            env: { 
+              NODE_ENV: 'production', 
+              DB_DATABASE: 'cost',
+              DB_PWD: '${DB_PWD}', 
+              DB_USER: '${DB_USER}',
+              DB_HOST: '${DB_HOST}',
+              JWT_SECRET: 'cpp&wmh' 
+            } } ] }" > ecosystem.config.js
+        env:
+          DB_PWD: ${{ secrets.ALI_DB_PWD }}
+          DB_USER: ${{ secrets.ALI_DB_USER }}
+          DB_HOST: ${{ secrets.ALI_DB_HOST }}
+      - name: Start server with PM2
+        run: |
+          pm2 start ecosystem.config.js

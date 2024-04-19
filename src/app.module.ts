@@ -14,22 +14,24 @@ import { AccountModule } from './modules/account/account.module';
     /* 配置文件模块 */
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ['.env.local', '.env'],
+      envFilePath: ['.env'],
     }),
     /**typeorm配置 */
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
         console.log(process.env.DB_HOST, 'process.env.DB_HOST');
+        console.log(process.env.DB_USER, 'process.env.DB_USER');
+        console.log(process.env.DB_PWD, 'process.env.DB_PWD');
         return {
           type: 'mysql',
           autoLoadEntities: true,
           host: process.env.DB_HOST || configService.get('DB_HOST'),
-          port: +process.env.DB_PORT || configService.get('DB_PORT'),
+          port: 3306,
           username: process.env.DB_USER || configService.get('DB_USER'),
           password: process.env.DB_PWD || configService.get('DB_PWD'),
           database: process.env.DB_DATABASE || configService.get('DB_DATABASE'),
-          synchronize: true,
+          synchronize: false,
           timezone: '+08:00',
         };
       },
