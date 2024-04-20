@@ -4,10 +4,8 @@ on:
   push:
     branches:
       - main
-
 env:
   TARGET_DIR: /www/web/keepAccount
-
 jobs:
   deploy:
     runs-on: ubuntu-latest
@@ -20,10 +18,14 @@ jobs:
           DB_PWD: ${{ secrets.ALI_DB_PWD }}
           DB_USER: ${{ secrets.ALI_DB_USER }}
           DB_HOST: ${{ secrets.ALI_DB_HOST }}
+          JWT_SECRET: ${{secrets.JWT_SECRET}}
+          JWT_EXPIRES_IN: ${{secrets.JWT_EXPIRES_IN}}
+          server_pass: ${{secrets.ALI_PASSWORD}}
+          server_host: ${{secrets.ALI_ADDRESS}}
         with:
-          host: ${{secrets.ALI_ADDRESS}}
+          host: $server_host
           user: 'root'
-          pass: ${{secrets.ALI_PASSWORD}}
+          pass: $server_pass
           connect_timeout: 20s
           first_ssh: |-
             rm -rf $TARGET_DIR
@@ -32,11 +34,8 @@ jobs:
             './*' => $TARGET_DIR/
           last_ssh: |-
             cd $TARGET_DIR
-            npm -v
-            node -v
-            pnpm -v
             pnpm install
             pnpm run build
             touch ecosystem.config.js
-            echo "module.exports = { apps : [ { name: 'my-nestjs-ka', script: './dist/main.js', env: { NODE_ENV: 'production',DB_DATABASE: 'cost',DB_PWD: '${DB_PWD}',DB_USER: '${DB_USER}',DB_HOST: '${DB_HOST}',JWT_SECRET: 'cpp&wmh' } } ] };" > ecosystem.config.js
-            pm2 start ecosystem.config.js
+            echo "module.exports = { apps : [ { name: 'my-nestjs-ka', instances: 2,exec_mode: 'cluster', script: './dist/main.js', env: { NODE_ENV: 'production',DB_DATABASE: 'cost',DB_PWD: '${DB_PWD}',DB_USER: '${DB_USER}',DB_HOST: '${DB_HOST}',JWT_EXPIRES_IN: '${JWT_EXPIRES_IN}' ,JWT_SECRET: '${JWT_SECRET}' } } ] };" > ecosystem.config.js
+            pm2 restart ecosystem.config.js

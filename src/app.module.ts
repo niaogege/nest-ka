@@ -14,15 +14,12 @@ import { AccountModule } from './modules/account/account.module';
     /* 配置文件模块 */
     ConfigModule.forRoot({
       isGlobal: true,
-      envFilePath: ['.env'],
+      envFilePath: ['.env.local'],
     }),
     /**typeorm配置 */
     TypeOrmModule.forRootAsync({
       inject: [ConfigService],
       useFactory: (configService: ConfigService) => {
-        console.log(process.env.DB_HOST, 'process.env.DB_HOST');
-        console.log(process.env.DB_USER, 'process.env.DB_USER');
-        console.log(process.env.DB_PWD, 'process.env.DB_PWD');
         return {
           type: 'mysql',
           autoLoadEntities: true,

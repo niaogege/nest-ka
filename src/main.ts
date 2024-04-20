@@ -23,7 +23,5 @@ async function bootstrap() {
   app.useGlobalFilters(new HttpExceptionFilter());
 
   await app.listen(process.env.APP_PORT || 7001);
-  console.log(process.env.DB_HOST, 'process.env.DB_HOST');
-  console.log(process.env.JWT_SECRET, 'process.env.DB_DATABASE');
 }
 bootstrap();

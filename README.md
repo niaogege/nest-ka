@@ -21,7 +21,7 @@
 - 账目表跟账单表的关联
 - 账目表跟类目表的关联
 - 类目表跟账单表的关联
-- 如何进行自动化部署,动态传参数
+- 如何进行自动化部署,动态传参数？pm2文档看了N遍，基本上都是在 ecosystem.config.js文件中进行配置环境变量，其实本来想通过命令行参数进行设置的，无奈不支持，问了gpt和kimi都是说阔以，但试过了都不行，无奈只能动态设置文件,最终通过动态输出js脚本解决，代码看 **.github/workflows**
 
 ### 主要模块
 
@@ -72,6 +72,7 @@ export class UpdatePasswordDto extends PickType(CreateUserDto, ['password']) {}
 
 ## 参考
 
+- [UI参考](https://www.zcool.com.cn/work/ZMzc1OTE2MDA=.html)
 - [NestJS 简单入门（三）用户登录与JWT](https://juejin.cn/post/7257518510531330106#heading-3)
 - [Nest.js 实战系列二-手把手带你-实现注册、扫码登录、jwt认证等](https://juejin.cn/post/7044708915438682148?searchId=20240407102607D2C754E842DCD37A5184#heading-4)
 
