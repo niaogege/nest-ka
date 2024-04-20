@@ -20,13 +20,11 @@ jobs:
           DB_HOST: ${{ secrets.ALI_DB_HOST }}
           JWT_SECRET: ${{secrets.JWT_SECRET}}
           JWT_EXPIRES_IN: ${{secrets.JWT_EXPIRES_IN}}
-          server_pass: ${{secrets.ALI_PASSWORD}}
-          server_host: ${{secrets.ALI_ADDRESS}}
         with:
-          host: $server_host
+          host: ${{secrets.ALI_ADDRESS}}
           user: 'root'
-          pass: $server_pass
-          connect_timeout: 20s
+          pass: ${{secrets.ALI_PASSWORD}}
+          connect_timeout: 60s
           first_ssh: |-
             rm -rf $TARGET_DIR
             mkdir -p $TARGET_DIR
