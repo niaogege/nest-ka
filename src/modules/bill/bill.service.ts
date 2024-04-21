@@ -1,10 +1,12 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
-import { CreateBillDto, UpdateBillDto, QueryBillDto } from './bill.dto';
 import { InjectRepository } from '@nestjs/typeorm';
-import { In, Like, Repository } from 'typeorm';
+import { In, Like, Repository, Between } from 'typeorm';
+import dayjs from 'dayjs';
+import { CreateBillDto, UpdateBillDto, QueryBillDto } from './bill.dto';
 import { Bill } from './bill.entity';
 import { AccountService } from '../account/account.service';
 import { CategoryService } from '../category/category.service';
+import { getAmount, transferData } from '../../utils';
 @Injectable()
 export class BillService {
   constructor(
@@ -24,16 +26,52 @@ export class BillService {
     return await this.billRep.save(curBill);
   }
 
+  /**
+   * 需要转换格式
+   * 拿到当前账本列表+时间过滤
+   * @param query
+   * @returns
+   */
   async findAll(query: QueryBillDto) {
-    const { page, size, userId } = query;
-    const [bills, total] = await this.billRep.findAndCount({
-      skip: (page - 1) * size, // offset
-      take: size, // limit
+    const {
+      page = 1,
+      size = 10,
+      userId,
+      accountId,
+      startTime,
+      endTime,
+      categoryId,
+    } = query;
+    const sTime = dayjs(startTime).startOf('d').toDate();
+    const eTime = dayjs(endTime).endOf('d').toDate();
+    const [bills] = await this.billRep.findAndCount({
       where: {
         userId,
+        shareAccountId: accountId,
+        upTime: Between(sTime, eTime),
+        categoryId,
+      },
+      order: {
+        upTime: 'DESC',
+      },
+      relations: {
+        category: true,
       },
     });
-    return { bills, total };
+    let listFlat = transferData(bills);
+    listFlat = listFlat.map((item) => {
+      const { bills } = item;
+      item.totalExpense = getAmount(bills, 1);
+      item.totalIncome = getAmount(bills, 2);
+      return item;
+    });
+    // 分页
+    listFlat = listFlat.slice((page - 1) * size, page * size);
+    // 总计支出
+    const totalExpense = getAmount(bills, 1);
+    // 总计收入
+    const totalIncome = getAmount(bills, 2);
+    return { bills: listFlat, totalExpense, totalIncome };
   }
 
   async findOne(id: number, userId) {

@@ -28,7 +28,7 @@ import { AccountModule } from './modules/account/account.module';
           username: process.env.DB_USER || configService.get('DB_USER'),
           password: process.env.DB_PWD || configService.get('DB_PWD'),
           database: process.env.DB_DATABASE || configService.get('DB_DATABASE'),
-          synchronize: false,
+          synchronize: process.env.NODE_ENV !== 'development' ? false : true,
           timezone: '+08:00',
         };
       },

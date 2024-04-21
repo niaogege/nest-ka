@@ -50,4 +50,19 @@ export class QueryBillDto {
 
   @Allow()
   page: number;
+
+  @IsNumber()
+  @IsNotEmpty({ message: '账目id不能为空' })
+  accountId: number;
+
+  @IsNumber()
+  @IsNotEmpty({ message: '过滤的开始时间' })
+  startTime: string;
+
+  @IsNumber()
+  @IsNotEmpty({ message: '过滤的结束时间' })
+  endTime: string;
+
+  @IsOptional()
+  categoryId: number;
 }

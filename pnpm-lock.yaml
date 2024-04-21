@@ -38,6 +38,9 @@ dependencies:
   class-validator:
     specifier: ^0.14.1
     version: 0.14.1
+  dayjs:
+    specifier: ^1.11.10
+    version: 1.11.10
   mysql2:
     specifier: ^3.9.3
     version: 3.9.3

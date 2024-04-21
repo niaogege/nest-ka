@@ -53,5 +53,5 @@ export class Category {
   @UpdateDateColumn({
     comment: '更新时间',
   })
-  uTime: Date;
+  upTime: Date;
 }

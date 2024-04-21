@@ -26,7 +26,7 @@ export class BillController {
 
   // 查询当前用户的所有账单进行分页
   @Get('list')
-  findAll(@Query() query: { page; size }, @Req() req: Request) {
+  findAll(@Query() query: QueryBillDto, @Req() req: Request) {
     const user = req[REQUEST_USER_KEY];
     const conditions = {
       ...query,

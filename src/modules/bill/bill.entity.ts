@@ -32,6 +32,18 @@ export class Bill {
   categoryId: number;
 
   @Column({
+    comment: '消费类别类型id',
+    nullable: true,
+  })
+  shareAccountId: number;
+
+  // @Column({
+  //   comment: '消费类别类型名称',
+  //   nullable: true,
+  // })
+  // categoryName: string;
+
+  @Column({
     comment: '支出1或者收入2或者不计收支3',
     default: 1,
   })
@@ -44,6 +56,7 @@ export class Bill {
 
   // 一个账单只能属于一个共享账目
   @ManyToOne(() => Account, (account) => account.bills)
+  @JoinColumn({ name: 'shareAccountId' })
   shareAccount: Account;
 
   // 一条账单只能属于一个类目
@@ -67,5 +80,5 @@ export class Bill {
   @UpdateDateColumn({
     comment: '更新时间',
   })
-  uptimeTime: Date;
+  upTime: Date;
 }
