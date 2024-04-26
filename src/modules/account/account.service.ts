@@ -99,7 +99,6 @@ export class AccountService {
   }
 
   async remove(id: number) {
-    await this.accountRep.delete(id);
-    return true;
+    return await this.accountRep.delete(id);
   }
 }

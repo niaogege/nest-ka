@@ -1,14 +1,4 @@
-import {
-  Controller,
-  Get,
-  Post,
-  Body,
-  Patch,
-  Param,
-  Delete,
-  Req,
-  UseGuards,
-} from '@nestjs/common';
+import { Controller, Get, Post, Body, UseGuards, Query } from '@nestjs/common';
 import { AuthGuard } from '@nestjs/passport';
 import { AuthService } from './auth.service';
 import { ConfigService } from '@nestjs/config';
@@ -28,8 +18,9 @@ export class AuthController {
     private configService: ConfigService,
   ) {}
 
+  // 微信端暂且不需要本地校验密码 remove authGuard
   @Public()
-  @UseGuards(AuthGuard('local'))
+  // @UseGuards(AuthGuard('local'))
   @Post('login')
   async login(@Body() userDto: CreateUserDto) {
     return this.authService.login(userDto);
@@ -39,5 +30,15 @@ export class AuthController {
   @Post('register')
   async register(@Body() user: CreateUserDto) {
     return this.userService.create(user);
+  }
+
+  /**
+   * @param code wx.login() 临时登录的凭证 换取用户的openId/session_key
+   * @returns
+   */
+  @Public()
+  @Post('mp')
+  async minprogramAuth(@Body() param: { code: string }) {
+    return this.authService.loginMp(param.code);
   }
 }

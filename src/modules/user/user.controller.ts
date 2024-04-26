@@ -2,6 +2,7 @@ import {
   Controller,
   Get,
   Post,
+  Request,
   Body,
   Patch,
   Param,
@@ -9,8 +10,9 @@ import {
   Query,
   Req,
 } from '@nestjs/common';
+import { REQUEST_USER_KEY } from '@/common/constants';
 import { UserService } from './user.service';
-import { UpdatePasswordDto } from './user.dto';
+import { UpdateUserDto } from './user.dto';
 
 @Controller('user')
 export class UserController {
@@ -21,9 +23,16 @@ export class UserController {
     return this.userService.findAll(query);
   }
 
-  @Get(':username')
-  findByUsername(@Param('username') username: string) {
-    return this.userService.findByUsername(username);
+  @Get('info')
+  getUserInfo(@Req() req: Request) {
+    const user = req[REQUEST_USER_KEY];
+    console.log(user, 'user');
+    return this.userService.findOne(+user.userId);
+  }
+
+  @Get(':openid')
+  findByUseropenid(@Param('openid') openid: string) {
+    return this.userService.findByUseropenid(openid);
   }
 
   @Get('/info/many')
@@ -38,12 +47,18 @@ export class UserController {
   }
 
   /** 管理员重置密码 */
-  @Patch('/reset/password/:userId')
-  resetPassword(
-    @Param('userId') userId: number,
-    @Body() dto: UpdatePasswordDto,
-  ) {
-    return this.userService.resetPassword(userId, dto.password);
+  // @Patch('/reset/password/:userId')
+  // resetPassword(
+  //   @Param('userId') userId: number,
+  //   @Body() dto: UpdatePasswordDto,
+  // ) {
+  //   return this.userService.resetPassword(userId, dto.password);
+  // }
+
+  // 更新昵称或者头像
+  @Patch(':id')
+  updateUser(@Param('id') id: number, @Body() updateInfo: UpdateUserDto) {
+    this.userService.update(+id, updateInfo);
   }
 
   @Delete(':id')

@@ -53,7 +53,6 @@ export class AccountController {
 
   @Delete(':id')
   remove(@Param('id') id: string) {
-    console.log('controller');
     return this.accountService.remove(+id);
   }
 }

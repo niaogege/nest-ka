@@ -1,8 +1,8 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { In, Like, Repository } from 'typeorm';
-import { hashSync } from 'bcryptjs';
-import { CreateUserDto } from './user.dto';
+// import { hashSync } from 'bcryptjs';
+import { CreateUserDto, UpdateUserDto } from './user.dto';
 import {
   CustomException,
   ErrorCode,
@@ -19,13 +19,14 @@ export class UserService {
 
   // 注册用户
   async create(user: CreateUserDto) {
-    const { username } = user;
-    const existUser = await this.findByUsername(username);
-    if (existUser && (existUser.id || existUser.username)) {
+    const { openid } = user;
+    const existUser = await this.findByUseropenid(openid);
+    if (existUser && (existUser.id || existUser.openid)) {
       throw new CustomException(ErrorCode.ERR_10001);
     }
     const newUser = this.userRep.create(user);
-    newUser.password = hashSync(newUser.password, 10);
+    // 暂时不需要密码
+    // newUser.password = hashSync(newUser.password, 10);
     const res = await this.userRep.save(newUser);
     if (!newUser.ownedAccounts) {
       await this.accountService.create({
@@ -36,17 +37,23 @@ export class UserService {
     }
     return res;
   }
-  // 根据用户名查找
-  async findByUsername(username: string) {
-    return this.userRep
-      .createQueryBuilder('user')
-      .addSelect('user.password')
-      .where('user.username=:username', { username })
-      .getOne();
+  // 根据用户openid查找
+  async findByUseropenid(openid: string) {
+    // return (
+    //   this.userRep
+    //     .createQueryBuilder('user')
+    //     // .addSelect('user.password')
+    //     .where('user.openid=:openid', { openid })
+    //     .getOne()
+    // );
+    return await this.userRep.findOneBy({ openid });
   }
+
+  // 根据openid查找 openid
 
   // 根据用户id进行查找 并且关联bill
   async findOne(id: number) {
+    console.log(id, 'id');
     return this.userRep.findOne({
       where: { id },
       relations: {
@@ -65,11 +72,11 @@ export class UserService {
   }
 
   // 重设密码
-  async resetPassword(id: number, password: string) {
-    const user = await this.userRep.findOne({ where: { id } });
-    user.password = hashSync(password);
-    return await this.userRep.save(user);
-  }
+  // async resetPassword(id: number, password: string) {
+  //   const user = await this.userRep.findOne({ where: { id } });
+  //   user.password = hashSync(password);
+  //   return await this.userRep.save(user);
+  // }
 
   // delete user
   async deleteOne(id: number) {
@@ -83,5 +90,12 @@ export class UserService {
       take: size,
     });
     return { users, total };
+  }
+
+  // 更新用户信息
+  async update(id: number, updateInfo: UpdateUserDto) {
+    const user = await this.userRep.findOneBy({ id });
+    const newUser = await this.userRep.merge(user, updateInfo);
+    return await this.userRep.save(newUser);
   }
 }

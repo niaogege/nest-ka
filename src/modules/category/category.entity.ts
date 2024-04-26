@@ -16,6 +16,7 @@ import { Account } from '../account/account.entity';
 })
 export class Category {
   @PrimaryGeneratedColumn({
+    comment: '类目主键',
     name: 'categoryId',
   })
   id: number;
@@ -36,6 +37,13 @@ export class Category {
     default: 0,
   })
   userId: number;
+
+  // @Column({
+  //   comment: '账本id',
+  //   default: 0, // 默认账本里
+  //   nullable: true,
+  // })
+  // shareAccountId: number;
 
   // 类目只能在账目里新建 账目的拥有者才能建类目
   @ManyToOne(() => Account, (account) => account.categorys)

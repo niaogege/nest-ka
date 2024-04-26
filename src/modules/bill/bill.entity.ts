@@ -32,7 +32,7 @@ export class Bill {
   categoryId: number;
 
   @Column({
-    comment: '消费类别类型id',
+    comment: '账本id',
     nullable: true,
   })
   shareAccountId: number;
@@ -60,7 +60,7 @@ export class Bill {
   shareAccount: Account;
 
   // 一条账单只能属于一个类目
-  @ManyToOne(() => Category, (category) => category.bills)
+  @ManyToOne(() => Category, (category) => category.bills, {})
   category: Category;
 
   // // 只能有一个用户创建

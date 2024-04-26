@@ -5,7 +5,10 @@ import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { User } from '../../modules/user/user.entities';
 import { UserService } from '../../modules/user/user.service';
-
+import {
+  CustomException,
+  ErrorCode,
+} from '@/common/exceptions/custom.exception';
 @Injectable()
 export class JwtStrategy extends PassportStrategy(Strategy) {
   constructor(
@@ -19,8 +22,8 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
   }
 
   async validate(payload: User) {
-    const existUser = await this.userService.findByUsername(payload.username);
-    if (!existUser) throw new UnauthorizedException('token验证失败');
+    const existUser = await this.userService.findByUseropenid(payload.openid);
+    if (!existUser) throw new CustomException(ErrorCode.ERR_11002);
     return existUser;
   }
 }

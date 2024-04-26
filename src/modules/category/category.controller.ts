@@ -28,9 +28,14 @@ export class CategoryController {
   }
 
   @Get('list')
-  findAllList(@Query() query: { page: number; size: number }, @Req() req) {
+  findAllList(
+    @Query()
+    query: { page: number; size: number; accountId: number; userId: number },
+    @Req() req,
+  ) {
     const user = req[REQUEST_USER_KEY];
-    return this.categoryService.findAllList(query, +user.userId);
+    query.userId = +user.userId;
+    return this.categoryService.findAllList(query);
   }
 
   @Get()

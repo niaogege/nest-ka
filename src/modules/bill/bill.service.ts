@@ -63,6 +63,8 @@ export class BillService {
       const { bills } = item;
       item.totalExpense = getAmount(bills, 1);
       item.totalIncome = getAmount(bills, 2);
+      item.titleDate = dayjs(item.date).date();
+      item.day = dayjs(item.date).format('dddd');
       return item;
     });
     // 分页

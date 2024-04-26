@@ -1,5 +1,9 @@
 import { Injectable, BadRequestException } from '@nestjs/common';
-import { CreateCategoryDto, UpdateCategoryDto } from './category.dto';
+import {
+  CreateCategoryDto,
+  UpdateCategoryDto,
+  QueryCategoryDto,
+} from './category.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository, In } from 'typeorm';
 import { Category } from './category.entity';
@@ -15,9 +19,9 @@ export class CategoryService {
   async create(createCategoryDto: CreateCategoryDto) {
     const category = this.categoryRep.create(createCategoryDto);
     // userId != 0 代表为某一账本所共有
-    if (createCategoryDto.userId != 0 && createCategoryDto.shareAccountId) {
+    if (createCategoryDto.userId != 0 && createCategoryDto.accountId) {
       const curAccount = await this.accountService.findOne(
-        createCategoryDto.shareAccountId,
+        createCategoryDto.accountId,
       );
       if (curAccount.userId !== createCategoryDto.userId) {
         throw new BadRequestException('当前账本不是当前用户创建的');
@@ -39,13 +43,15 @@ export class CategoryService {
     });
   }
 
-  async findAllList(query, userId) {
-    const { page, size } = query;
+  async findAllList(query: QueryCategoryDto) {
+    const { page, size, userId } = query;
+    console.log(query, 'query');
     const [categorys, total] = await this.categoryRep.findAndCount({
-      skip: (page - 1) * size, // offset
+      skip: (page - 1) * size, // offset11
       take: size, // limit
       where: {
         userId: In([userId, 0]),
+        // shareAccountId: +accountId,
       },
     });
     return { categorys, total };
@@ -59,14 +65,15 @@ export class CategoryService {
     });
   }
 
+  // userId:0 代码默认所有用户共享
   async update(id: number, updateCategoryDto: UpdateCategoryDto) {
     const curCategory = await this.findOne(id);
     if (!curCategory) {
       throw new BadRequestException('当前类目不存在');
     }
-    if (updateCategoryDto.userId != 0 && updateCategoryDto.shareAccountId) {
+    if (updateCategoryDto.userId != 0 && updateCategoryDto.accountId) {
       const curAccount = await this.accountService.findOne(
-        updateCategoryDto.shareAccountId,
+        updateCategoryDto.accountId,
       );
       if (curAccount.userId !== updateCategoryDto.userId) {
         throw new BadRequestException('当前类目不是当前账本创建的');

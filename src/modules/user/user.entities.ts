@@ -15,16 +15,22 @@ export class User {
   @PrimaryGeneratedColumn() //默认主键 自增
   id: number;
 
-  @Column({ length: 20, unique: true })
+  @Column({ length: 20, default: '默认微信昵称' })
   username: string;
 
   // 从数据库获取用户信息时 不读取password，可以设置长度30个字节
-  @Exclude()
-  @Column({
-    select: false,
-    length: 100,
-  })
-  password: string;
+  // 微信基础登录 不需要password
+  // @Exclude()
+  // @Column({
+  //   select: false,
+  //   length: 100,
+  // })
+  // password: string;
+
+  // 微信端 登录 不需要手机号和密码
+  // 直接通过openid标识是否注册
+  @Column({ default: '', comment: '微信小程序端唯一标识' })
+  openid: string;
 
   @Column({
     default: 'This is My KeepAccount 1',
@@ -32,7 +38,8 @@ export class User {
   signature: string;
 
   @Column({
-    default: 'https://bythewayer.com/logo.png',
+    default:
+      'https://thirdwx.qlogo.cn/mmopen/vi_32/POgEwh4mIHO4nibH0KlMECNjjGxQUq24ZEaGT4poC6icRiccVGKSyXwibcPq4BWmiaIGuG1icwxaQX6grC9VemZoJ8rg/132',
   })
   avatar: string;
 

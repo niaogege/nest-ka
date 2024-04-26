@@ -29,6 +29,21 @@ export class CreateCategoryDto {
   @IsNotEmpty({
     message: '新建账单必须要传入账本',
   })
-  shareAccountId: number;
+  accountId: number;
 }
 export class UpdateCategoryDto extends PartialType(CreateCategoryDto) {}
+
+export class QueryCategoryDto extends PartialType(CreateCategoryDto) {
+  @Allow()
+  size: number;
+
+  @Allow()
+  page: number;
+
+  @IsNumber()
+  // @IsNotEmpty({
+  //   message: '新建账单必须要传入账本',
+  // })
+  @IsOptional()
+  accountId?: number;
+}

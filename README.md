@@ -24,6 +24,7 @@
 - 如何进行自动化部署,动态传参数？pm2文档看了N遍，基本上都是在 ecosystem.config.js文件中进行配置环境变量，其实本来想通过命令行参数进行设置的，无奈不支持，问了gpt和kimi都是说阔以，但试过了都不行，无奈只能动态设置文件,最终通过动态输出js脚本解决，代码看 **.github/workflows**
 - 账单需要根据账本/时间/类目进行过滤，需要相应sql查询
 - 查询账单列表的时候，输入202404月的时候，需要查询当月的所有列表,用到**Between**函数
+- [最终 小程序端也需要展示，微信登录相关](https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/login.html)
 
 ## Description
 
