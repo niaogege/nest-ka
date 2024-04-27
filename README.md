@@ -49,6 +49,13 @@ $ pnpm run start:dev
 $ pnpm run start:prod
 ```
 
+## nest快捷命令新建module
+
+```bash
+//创建一个 user resource 仓库
+nest g res user
+```
+
 ## License
 
 Nest is [MIT licensed](LICENSE).

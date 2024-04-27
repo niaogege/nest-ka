@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common';
-
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { AppController } from './app.controller';
@@ -9,6 +8,7 @@ import { AuthModule } from './modules/auth/auth.module';
 import { BillModule } from './modules/bill/bill.module';
 import { CategoryModule } from './modules/category/category.module';
 import { AccountModule } from './modules/account/account.module';
+import { UploadModule } from './modules/upload/upload.module';
 @Module({
   imports: [
     /* 配置文件模块 */
@@ -33,6 +33,8 @@ import { AccountModule } from './modules/account/account.module';
         };
       },
     }),
+    /**upload */
+    UploadModule,
     UserModule,
     AuthModule,
     BillModule,

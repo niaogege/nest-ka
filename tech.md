@@ -78,6 +78,10 @@ https://api.weixin.qq.com/sns/jscode2session?appid=wx8b727ea944b22161&secret=5a3
 - 4.前端请求每次都需带上token,如果token过期，则需要重新去掉 调/auth/mp->/auth/login 拿到token
 - 5.本地如何进行调试呢
 
+### 图片上传服务
+
+小程序更换头像的时候需要用到，把微信里的临时路径图片换成自己服务器里的图片地址？
+
 ## 问题记录
 
 - post/get/delete请求参数不合法，如何规避

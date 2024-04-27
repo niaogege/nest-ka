@@ -3,7 +3,7 @@ import {
   Get,
   Post,
   Body,
-  Patch,
+  Put,
   Param,
   Delete,
   Req,
@@ -49,7 +49,7 @@ export class BillController {
   }
 
   // 根据账单id更新账单
-  @Patch(':id')
+  @Put(':id')
   update(
     @Param('id') id: string,
     @Body() updateBillDto: UpdateBillDto,

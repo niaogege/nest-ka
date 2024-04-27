@@ -3,12 +3,12 @@ import {
   Get,
   Post,
   Body,
-  Patch,
   Param,
   Delete,
   Req,
   Request,
   Query,
+  Put,
 } from '@nestjs/common';
 import { AccountService } from './account.service';
 import { CreateAccountDto, UpdateAccountDto } from './account.dto';
@@ -40,7 +40,7 @@ export class AccountController {
     return this.accountService.findOne(+id);
   }
 
-  @Patch(':id')
+  @Put(':id')
   update(
     @Param('id') id: string,
     @Body() updateAccountDto: UpdateAccountDto,

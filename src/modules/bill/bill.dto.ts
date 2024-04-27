@@ -64,5 +64,5 @@ export class QueryBillDto {
   endTime: string;
 
   @IsOptional()
-  categoryId: number;
+  categoryId?: number;
 }

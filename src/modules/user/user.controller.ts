@@ -4,11 +4,11 @@ import {
   Post,
   Request,
   Body,
-  Patch,
   Param,
   Delete,
   Query,
   Req,
+  Put,
 } from '@nestjs/common';
 import { REQUEST_USER_KEY } from '@/common/constants';
 import { UserService } from './user.service';
@@ -47,7 +47,7 @@ export class UserController {
   }
 
   /** 管理员重置密码 */
-  // @Patch('/reset/password/:userId')
+  // @Put('/reset/password/:userId')
   // resetPassword(
   //   @Param('userId') userId: number,
   //   @Body() dto: UpdatePasswordDto,
@@ -56,7 +56,7 @@ export class UserController {
   // }
 
   // 更新昵称或者头像
-  @Patch(':id')
+  @Put(':id')
   updateUser(@Param('id') id: number, @Body() updateInfo: UpdateUserDto) {
     this.userService.update(+id, updateInfo);
   }
