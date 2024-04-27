@@ -98,6 +98,6 @@ https://api.weixin.qq.com/sns/jscode2session?appid=wx8b727ea944b22161&secret=5a3
 ```bash
      first_ssh: |-
         cd $TARGET_DIR
-        rm -rf src
+        rm -rf $TARGET_DIR
         mkdir -p $TARGET_DIR
 ```
