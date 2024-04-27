@@ -92,3 +92,12 @@ https://api.weixin.qq.com/sns/jscode2session?appid=wx8b727ea944b22161&secret=5a3
 - [NestJS 简单入门（三）用户登录与JWT](https://juejin.cn/post/7257518510531330106#heading-3)
 - [Nest.js 实战系列二-手把手带你-实现注册、扫码登录、jwt认证等](https://juejin.cn/post/7044708915438682148?searchId=20240407102607D2C754E842DCD37A5184#heading-4)
 - [一文看懂小程序一键登录/注册，快速创建用户体系](https://juejin.cn/post/7152682507916771358?searchId=20240424193108D4A8E073DE28E2A7A657#heading-21)
+
+## yml
+
+```bash
+     first_ssh: |-
+        cd $TARGET_DIR
+        rm -rf src
+        mkdir -p $TARGET_DIR
+```

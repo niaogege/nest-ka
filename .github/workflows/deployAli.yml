@@ -30,7 +30,6 @@ jobs:
           first_ssh: |-
             cd $TARGET_DIR
             rm -rf src
-            # mkdir -p $TARGET_DIR
           scp: |-
             './*' => $TARGET_DIR/
           last_ssh: |-
