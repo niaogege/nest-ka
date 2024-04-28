@@ -32,9 +32,6 @@ jobs:
             cd $TARGET_DIR
             cd code
             ls
-            if [ ! -d $TARGET_DIR_Code_Public ]; then
-              mkdir -p $TARGET_DIR_Code_Public
-            fi
             mv ./public/*  ../public/*
             rm -rf code
             mkdir -p code
