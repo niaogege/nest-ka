@@ -32,7 +32,7 @@ jobs:
             cd $TARGET_DIR
             cd code
             ls
-            mv ./public/*  ../public/*
+            mv ./public  ../public
             rm -rf code
             mkdir -p code
           scp: |-
