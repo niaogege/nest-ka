@@ -25,6 +25,7 @@
 - 账单需要根据账本/时间/类目进行过滤，需要相应sql查询
 - 查询账单列表的时候，输入202404月的时候，需要查询当月的所有列表,用到**Between**函数
 - [最终 小程序端也需要展示，微信登录相关](https://developers.weixin.qq.com/miniprogram/dev/framework/open-ability/login.html)
+- 微信头像上传和路径保存
 
 ## Description
 
