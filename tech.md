@@ -95,6 +95,8 @@ https://api.weixin.qq.com/sns/jscode2session?appid=wx8b727ea944b22161&secret=5a3
 
 ## yml
 
+- 遇到一个问题，如何保存微信头像的图片资源，保存在哪里合适呢
+
 ```bash
      first_ssh: |-
         cd $TARGET_DIR

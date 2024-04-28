@@ -30,7 +30,7 @@ jobs:
           connect_timeout: 60s
           first_ssh: |-
             cd $TARGET_DIR
-            mv ./code/public ./public
+            mv ./code/public ./
             rm -rf code
             mkdir -p code
           scp: |-
