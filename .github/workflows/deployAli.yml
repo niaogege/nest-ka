@@ -6,7 +6,6 @@ on:
       - main
 env:
   TARGET_DIR: /www/web/keepAccount
-  TARGET_DIR_Code_Public: /www/web/keepAccount/code/public
 jobs:
   deploy:
     runs-on: ubuntu-latest
