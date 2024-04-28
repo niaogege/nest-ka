@@ -29,12 +29,17 @@ jobs:
           connect_timeout: 60s
           first_ssh: |-
             cd $TARGET_DIR
-            rm -rf $TARGET_DIR
-            mkdir -p $TARGET_DIR
+            cd code
+            ls
+            mv ./public/*  ../public
+            rm -rf code
+            mkdir -p code
           scp: |-
-            './*' => $TARGET_DIR/
+            './*' => $TARGET_DIR/code/
           last_ssh: |-
             cd $TARGET_DIR
+            cp -r public ./code/public
+            cd $TARGET_DIR/code
             pnpm install
             pnpm run build
             touch ecosystem.config.js
