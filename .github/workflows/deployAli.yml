@@ -29,17 +29,16 @@ jobs:
           pass: ${{secrets.ALI_PASSWORD}}
           connect_timeout: 60s
           first_ssh: |-
-            cd $TARGET_DIR
-            cd code
+            cd $TARGET_DIR/code
             ls
-            mv ./public  ../public
+            cp -r public  ../public
             rm -rf code
             mkdir -p code
           scp: |-
             './*' => $TARGET_DIR/code/
           last_ssh: |-
             cd $TARGET_DIR
-            cp -r public ./code/public
+            cp -r public ./code
             cd $TARGET_DIR/code
             pnpm install
             pnpm run build
