@@ -17,6 +17,10 @@ export class CategoryService {
   ) {}
 
   async create(createCategoryDto: CreateCategoryDto) {
+    const curCate = await this.findName(createCategoryDto.categoryName);
+    if (curCate) {
+      throw new BadRequestException('当前类目已经存在了');
+    }
     const category = this.categoryRep.create(createCategoryDto);
     // userId != 0 代表为某一账本所共有
     if (createCategoryDto.userId != 0 && createCategoryDto.accountId) {
@@ -32,7 +36,6 @@ export class CategoryService {
   }
 
   async findAll(userId: number) {
-    console.log(userId, 'userId');
     return await this.categoryRep.find({
       where: {
         userId,
@@ -45,13 +48,12 @@ export class CategoryService {
 
   async findAllList(query: QueryCategoryDto) {
     const { page, size, userId } = query;
-    console.log(query, 'query');
     const [categorys, total] = await this.categoryRep.findAndCount({
       skip: (page - 1) * size, // offset11
       take: size, // limit
       where: {
         userId: In([userId, 0]),
-        // shareAccountId: +accountId,
+        // shareAccountId: accountId,
       },
     });
     return { categorys, total };
@@ -62,6 +64,12 @@ export class CategoryService {
       relations: {
         bills: true,
       },
+    });
+  }
+
+  async findName(name: string) {
+    return await this.categoryRep.findOne({
+      where: { categoryName: name },
     });
   }
 

@@ -36,6 +36,10 @@ export class CreateBillDto {
   @IsNumber()
   @IsNotEmpty({ message: '账目id不能为空' })
   accountId: number;
+
+  @IsString()
+  @IsOptional()
+  ctime: string;
 }
 
 export class UpdateBillDto extends CreateBillDto {}

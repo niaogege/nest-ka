@@ -16,12 +16,13 @@ export class BillService {
   ) {}
 
   async create(bill: CreateBillDto) {
+    bill.ctime = dayjs(+bill.ctime).format();
     const curBill = this.billRep.create(bill);
     if (bill.accountId) {
-      curBill.shareAccount = await this.accountService.findOne(bill.accountId);
+      curBill.shareAccount = await this.accountService.findOne(+bill.accountId);
     }
     if (bill.categoryId) {
-      curBill.category = await this.categoryService.findOne(bill.categoryId);
+      curBill.category = await this.categoryService.findOne(+bill.categoryId);
     }
     return await this.billRep.save(curBill);
   }
@@ -47,7 +48,7 @@ export class BillService {
     const [bills] = await this.billRep.findAndCount({
       where: {
         userId,
-        shareAccountId: accountId,
+        shareAccountId: +accountId,
         upTime: Between(sTime, eTime),
         categoryId,
       },
@@ -73,7 +74,12 @@ export class BillService {
     const totalExpense = getAmount(bills, 1);
     // 总计收入
     const totalIncome = getAmount(bills, 2);
-    return { bills: listFlat, totalExpense, totalIncome };
+    return {
+      bills: listFlat,
+      totalExpense,
+      totalIncome,
+      remain: totalIncome - totalExpense, // 结余
+    };
   }
 
   async findOne(id: number, userId) {
@@ -99,6 +105,7 @@ export class BillService {
 
   // 获取单一账单类目的用户信息
   findOneType(categoryId: number) {
+    console.log(categoryId, 'categoryId');
     return this.billRep.find({
       where: {
         categoryId,

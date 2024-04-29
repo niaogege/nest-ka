@@ -44,8 +44,8 @@ export class BillController {
 
   // 根据某一类型的账单
   @Get('/type/:typeId')
-  findOneType(@Param() typeId: number) {
-    return this.billService.findOneType(typeId);
+  findOneType(@Param('typeId') typeId: number) {
+    return this.billService.findOneType(+typeId);
   }
 
   // 根据账单id更新账单

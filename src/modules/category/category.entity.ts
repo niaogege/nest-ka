@@ -26,6 +26,11 @@ export class Category {
   })
   categoryName: string;
 
+  // @Column({
+  //   comment: '图标',
+  //   default: ''
+  // })
+
   @Column({
     comment: '支出1或者收入2or3',
     default: 1,
