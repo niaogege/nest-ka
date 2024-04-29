@@ -16,7 +16,7 @@ export class BillService {
   ) {}
 
   async create(bill: CreateBillDto) {
-    bill.ctime = dayjs(+bill.ctime).format();
+    bill.ctime = dayjs(bill.ctime).format();
     const curBill = this.billRep.create(bill);
     if (bill.accountId) {
       curBill.shareAccount = await this.accountService.findOne(+bill.accountId);
