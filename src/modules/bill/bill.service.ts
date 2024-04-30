@@ -49,11 +49,11 @@ export class BillService {
       where: {
         userId,
         shareAccountId: +accountId,
-        upTime: Between(sTime, eTime),
+        ctime: Between(sTime, eTime),
         categoryId,
       },
       order: {
-        upTime: 'DESC',
+        ctime: 'DESC',
       },
       relations: {
         category: true,
@@ -62,8 +62,8 @@ export class BillService {
     let listFlat = transferData(bills);
     listFlat = listFlat.map((item) => {
       const { bills } = item;
-      item.totalExpense = getAmount(bills, 1);
-      item.totalIncome = getAmount(bills, 2);
+      item.totalExpense = getAmount(bills, 1); // 支出
+      item.totalIncome = getAmount(bills, 2); // 收入
       item.titleDate = dayjs(item.date).date();
       item.day = dayjs(item.date).format('dddd');
       return item;

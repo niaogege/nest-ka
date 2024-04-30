@@ -5,14 +5,14 @@ export const getAmount = (bills, payType) => {
       pre += cur.amount;
       return pre;
     } else {
-      return 0;
+      return pre;
     }
   }, 0);
 };
 
 export const transferData = (bills) => {
   return bills.reduce((pre, cur) => {
-    const date = dayjs(cur.upTime).format('YYYY-MM-DD');
+    const date = dayjs(cur.ctime).format('YYYY-MM-DD');
     const fIndex =
       pre && pre.length && pre.findIndex((one) => one.date == date);
     if (pre && pre.length && fIndex > -1) {
